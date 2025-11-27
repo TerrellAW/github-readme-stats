@@ -886,6 +886,91 @@ Since the GitHub API only allows 5k requests per hour, my `https://github-readme
 5.  You're done 🎉
     </details>
 
+## Self hosting
+
+> [!WARNING]
+> This is not officially supported by the creators of this software, but its what I do.
+
+<details>
+<summary><b>:hammer_and_wrench: Step-by-step guide for deploying on your own server</b></summary>
+
+### Prerequisites
+
+1.  An old computer that can run a linux server distribution, such as Ubuntu Server
+2.  Server software: Docker, Nginx
+For Debian/Ubuntu
+``` bash
+# Add Docker's official GPG key:
+sudo apt update
+sudo apt install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update
+
+# Install Nginx
+sudo apt install nginx
+```
+3.  A domain or subdomain, you can get a free one at https://www.duckdns.org/domains
+
+### Why self-host
+
+Self-hosting gives you full control over not only the software, but the hardware of your server. Its also great for expanding your skillset and gaining experience with server management in the comfort of your own home. If you self-host, there are no rate limits, fees or lack of control over your privacy and services.
+
+### Setup
+
+1.  Clone/fork this repository to your server
+2.  Create a .env file which contains:
+```
+PAT_1=your-github-personal-access-token
+WHITELIST=your-username,friends-username(optional),cousins-username(optional)
+```
+3.  cd to the repository and run `./scripts/start.sh`, this script will automatically create and run the docker container
+4.  Configure Nginx reverse proxy:
+``` nginx
+server {
+    listen 80;
+    listen [::]:80; # For IPv6, not necessary if only using IPv4
+    
+    server_name your-subdomain.duckdns.org;
+    
+    location / {
+        proxy_pass http://localhost:9000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+5.  Enable the site:
+``` bash
+sudo ln -s /etc/nginx/sites-available/your-domain.com /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+6. Add HTTPS with Certbot (optional):
+``` bash
+sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d your-subdomain.duckdns.org
+```
+
+### Known Issues
+
+Duckdns can sometimes be unreliable. If the web page on your server successfully loads on a device on a different network but fails to pass the Certbot HTTP-01 challenge, simply wait until the next day to try again.
+
+</details>
+
 ## Available environment variables
 
 GitHub Readme Stats provides several environment variables that can be used to customize the behavior of your self-hosted instance. These include:
