@@ -898,8 +898,9 @@ Since the GitHub API only allows 5k requests per hour, my `https://github-readme
 
 1.  An old computer that can run a linux server distribution, such as Ubuntu Server
 2.  Server software: Docker, Nginx
-For Debian/Ubuntu
 ``` bash
+# For Debian/Ubuntu
+
 # Add Docker's official GPG key:
 sudo apt update
 sudo apt install ca-certificates curl
