@@ -22,7 +22,7 @@ docker run -it \
     --name readme-app \
     --restart unless-stopped \
     -v $(pwd):/app \
-    -p 8080:8080 \
+    -p 9000:9000 \
     -w /app \
     node:lts \
 	bash -c "npm i && node express.js"
