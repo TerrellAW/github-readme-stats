@@ -931,14 +931,15 @@ Self-hosting gives you full control over not only the software, but the hardware
 ### Setup
 
 1.  Clone/fork this repository to your server
-2.  Create a .env file which contains:
+2.  cd to the repository and create a .env file which contains:
 ```
 PAT_1=your-github-personal-access-token
 WHITELIST=your-username,friends-username(optional),cousins-username(optional)
 ```
-3.  cd to the repository and run `./scripts/start.sh`, this script will automatically create and run the docker container
+3.  Run `./scripts/start.sh`, this script will automatically create and run the docker container
 4.  Configure Nginx reverse proxy:
 ``` nginx
+# File location: /etc/nginx/sites-available/your-subdomain.duckdns.org
 server {
     listen 80;
     # For IPv6, not necessary if only using IPv4
