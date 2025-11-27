@@ -11,7 +11,7 @@ eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_ed25519
 
 # Pull latest changes from remote repository
-git pull origin main
+git pull origin master
 
 # Stop and remove existing container if it exists
 docker stop readme-app 2>/dev/null || true
