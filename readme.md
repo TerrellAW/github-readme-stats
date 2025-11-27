@@ -940,7 +940,8 @@ WHITELIST=your-username,friends-username(optional),cousins-username(optional)
 ``` nginx
 server {
     listen 80;
-    listen [::]:80; # For IPv6, not necessary if only using IPv4
+    # For IPv6, not necessary if only using IPv4
+    listen [::]:80;
     
     server_name your-subdomain.duckdns.org;
     
