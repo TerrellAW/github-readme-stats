@@ -25,7 +25,6 @@ docker run -it \
     -p 8080:8080 \
     -w /app \
     node:lts \
-	npm i \
 	bash -c "npm i && node express.js"
 
 # Show container status
