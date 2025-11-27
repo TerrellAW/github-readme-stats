@@ -24,6 +24,7 @@ docker run -it \
     -v $(pwd):/app \
     -p 9000:9000 \
     -w /app \
+	--env-file .env \
     node:lts \
 	bash -c "npm i && node express.js"
 
